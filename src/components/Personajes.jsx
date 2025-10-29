@@ -31,7 +31,7 @@ export default class Personajes extends Component {
     }
   render() {
     return (
-      <div>Personajes
+      <div>Personajes de  {this.props.idSerie}
         <BotonVolver idSerie={this.props.idSerie}/>
         <table>
             <thead>

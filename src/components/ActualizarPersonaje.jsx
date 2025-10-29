@@ -9,7 +9,9 @@ export default class ActualizarPersonaje extends Component {
     state={
         series:[],
         personajes:[],
-        volver:false
+        volver:false,
+        serieSeleccionada:{},
+        personajeSeleccionado:{}
     }
     cargarSeries(){
         var url="https://apiseriespersonajes.azurewebsites.net/api/Series";
@@ -40,6 +42,22 @@ export default class ActualizarPersonaje extends Component {
                 
         })
     }
+    cargarSerieInformacion=()=>{
+        var url="https://apiseriespersonajes.azurewebsites.net/api/Series/"+parseInt(this.serieSelected.current.value);
+        axios.get(url).then(respuesta=>{
+            this.setState({
+                serieSeleccionada:respuesta.data
+            })
+        })
+    }
+    cargarPersonajeInformacion=()=>{
+        var url="https://apiseriespersonajes.azurewebsites.net/api/Personajes/"+parseInt(this.personajeSelected.current.value);
+        axios.get(url).then(respuesta=>{
+            this.setState({
+                personajeSeleccionado:respuesta.data
+            })
+        })
+    }
     actualizarInformacionPersonaje=(event)=>{
         event.preventDefault();
          var url="https://apiseriespersonajes.azurewebsites.net/api/Personajes/"+parseInt(this.personajeSelected.current.value)+"/"+this.serieSelected.current.value;
@@ -58,9 +76,9 @@ export default class ActualizarPersonaje extends Component {
   render() {
     return (
       <div>Actualizar  Personaje
-
+          
         <form className='form-control' onSubmit={this.actualizarInformacionPersonaje}>
-            <select className='form-control'  id="personajeSelect" ref={this.serieSelected} onChange={this.cargarPersonajesSerie}>
+            <select className='form-control'  id="personajeSelect" ref={this.serieSelected} onChange={this.cargarSerieInformacion}>
                 <option value="">Seleccione una serie</option>
                 {
                     this.state.series.map((serie,index)=>{
@@ -70,7 +88,7 @@ export default class ActualizarPersonaje extends Component {
                     })
                 }
             </select>
-            <select className='form-control' id="personajeSelect" ref={this.personajeSelected}>
+            <select className='form-control' id="personajeSelect" ref={this.personajeSelected} onChange={this.cargarPersonajeInformacion}>
                 {
                     
                     this.state.personajes.map((personaje,index)=>{
@@ -84,9 +102,15 @@ export default class ActualizarPersonaje extends Component {
             </select>
             <button className='form-control' type='submit'>Actualizar Personaje</button>
         </form>
+        <div><h1>{this.state.serieSeleccionada.nombre}</h1>
+        <img src={this.state.serieSeleccionada.imagen} alt={this.state.serieSeleccionada.nombre} />
          {
             this.state.volver && <Navigate to={"/personajes/"+this.serieSelected.current.value}/>
          }
+      </div>
+      <div><h1>{this.state.personajeSeleccionado.nombre}</h1>
+        <img src={this.state.personajeSeleccionado.imagen} alt={this.state.personajeSeleccionado.nombre} />
+      </div>
       </div>
     )
   }
