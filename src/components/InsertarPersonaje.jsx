@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react'
+import { Navigate } from 'react-router-dom';
 
 export default class InsertarPersonaje extends Component {
     url="";
@@ -7,7 +8,8 @@ export default class InsertarPersonaje extends Component {
     cajaimagen=React.createRef();
     cajaSelect=React.createRef();
     state={
-        series:[]
+        series:[],
+        volver:false
     }
     cargarSeries(){
         var url="https://apiseriespersonajes.azurewebsites.net/api/Series";
@@ -41,6 +43,9 @@ export default class InsertarPersonaje extends Component {
         }).then(respuesta=>{
             console.log("Personaje Insertado");
             alert("Personaje Insertado");
+            this.setState({
+                volver:true
+            })
         })
     }
   render() {
@@ -63,6 +68,9 @@ export default class InsertarPersonaje extends Component {
             </select>
             <button type="submit">Insertar Personaje</button>
         </form>
+        {
+            this.state.volver && <Navigate to={"/personajes/"+this.cajaSelect.current.value}/>
+        }
       </div>
     )
   }

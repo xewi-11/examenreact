@@ -30,9 +30,19 @@ export default class ActualizarPersonaje extends Component {
                 
         })
     }
+    cargarPersonajesSerie2=()=>{
+        var url="https://apiseriespersonajes.azurewebsites.net/api/Personajes";
+        axios.get(url).then(respuesta=>{
+               
+                this.setState({
+                    personajes:respuesta.data
+                })
+                
+        })
+    }
     actualizarInformacionPersonaje=(event)=>{
         event.preventDefault();
-         var url="https://apiseriespersonajes.azurewebsites.net/api/Personajes/"+parseInt(this.personajeSelected.current.value)+"/"+parseInt(this.serieSelected.current.value);
+         var url="https://apiseriespersonajes.azurewebsites.net/api/Personajes/"+parseInt(this.personajeSelected.current.value)+"/"+this.serieSelected.current.value;
          axios.put(url).then(respuesta=>{
                 console.log("personaje actualizado");
                 this.setState({
@@ -43,6 +53,7 @@ export default class ActualizarPersonaje extends Component {
     }
     componentDidMount(){
         this.cargarSeries();
+        this.cargarPersonajesSerie2();
     }
   render() {
     return (
@@ -74,7 +85,7 @@ export default class ActualizarPersonaje extends Component {
             <button className='form-control' type='submit'>Actualizar Personaje</button>
         </form>
          {
-            this.state.volver && <Navigate to={"/serie/"+this.serieSelected.current.value}/>
+            this.state.volver && <Navigate to={"/personajes/"+this.serieSelected.current.value}/>
          }
       </div>
     )
